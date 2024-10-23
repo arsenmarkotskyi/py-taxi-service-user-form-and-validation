@@ -1,8 +1,5 @@
 from django import forms
 import re
-
-from django.contrib.auth.forms import UserCreationForm
-
 from taxi.models import Driver, Car
 
 
@@ -25,14 +22,10 @@ class DriverLicenseUpdateForm(forms.ModelForm):
                 "The license number must contain 8 characters."
             )
 
-        if not re.match(r"^[A-Z]{3}", license_number):
+        if not re.match(r"^[A-Z]{3}\d{5}$", license_number):
             raise forms.ValidationError(
-                "The first 3 characters must be uppercase letters."
-            )
-
-        if not re.match(r"^\d{5}$", license_number[3:]):
-            raise forms.ValidationError(
-                "The last 5 characters must be digits."
+                "The license number must consist of 3 uppercase letters "
+                "followed by 5 digits."
             )
 
         return license_number
